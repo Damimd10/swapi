@@ -1,31 +1,59 @@
 import React from 'react';
 
-import { IPlanet } from '../../api/getPlanets';
+import Column from './Column';
+
 import Planet from '../Planet';
 import { COLUMNS } from '../../utils/constants';
+import { IPlanet } from '../../api/getPlanets';
+import { usePlanetContext } from '../../contexts/Planet';
 
 type TableProps = {
   data: IPlanet[];
 };
 
-const Table: React.FC<TableProps> = ({ data }) => (
-  <table className="min-w-full leading-normal">
-    <thead>
-      {COLUMNS.map((name, index) => (
-        <th
-          key={`${name}-${index}`}
-          className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-        >
-          {name}
-        </th>
-      ))}
-    </thead>
-    <tbody>
-      {data.map((planet, index) => (
-        <Planet key={`${planet.name}-${index}`} {...planet} />
-      ))}
-    </tbody>
-  </table>
-);
+type SortType = 'ASC' | 'DESC';
+
+const toggleType = (type: SortType) => {
+  if (type === 'ASC') return 'DESC';
+  return 'ASC';
+};
+
+const Table: React.FC<TableProps> = ({ data }) => {
+  const { setSort, sort } = usePlanetContext();
+
+  const handleClickColumn = (name: string) => {
+    const column = COLUMNS.find((currentColumn) => currentColumn.name === name);
+
+    if (!column || !column.sort) return;
+
+    if (sort.name === name) {
+      return setSort({ ...sort, type: toggleType(sort.type) });
+    }
+
+    return setSort({ name, type: 'ASC' });
+  };
+
+  const columnSorted = (name: string) => (sort.name === name ? sort.type : false);
+
+  return (
+    <table className="min-w-full leading-normal">
+      <thead>
+        {COLUMNS.map(({ name, sort = false }, index) => (
+          <Column
+            key={`${name}-${index}`}
+            name={name}
+            onClick={handleClickColumn}
+            sort={sort && columnSorted(name)}
+          />
+        ))}
+      </thead>
+      <tbody>
+        {data.map((planet, index) => (
+          <Planet key={`${planet.name}-${index}`} {...planet} />
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
 export default Table;

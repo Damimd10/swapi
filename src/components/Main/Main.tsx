@@ -1,66 +1,70 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 
-import Filters from '../Filters';
 import Pagination from '../Pagination';
 import SearchInput from '../SearchInput';
 import Table from '../Table';
 
 import { usePlanetContext } from '../../contexts/Planet';
-import { DEFAULT_URL, MAX_ITEMS } from '../../utils/constants';
-import {
-  sortByDiameterASC,
-  sortByDiameterDESC,
-  sortByNameASC,
-  sortByNameDESC,
-  sortByPopulationASC,
-  sortByPopulationDESC,
-} from '../../utils/sorting';
-import getPlanets from '../../api/getPlanets';
-
-const SORT_HASH = {
-  'name-asc': sortByNameASC,
-  'name-desc': sortByNameDESC,
-  'population-asc': sortByPopulationASC,
-  'population-desc': sortByPopulationDESC,
-  'diameter-asc': sortByDiameterASC,
-  'diameter-desc': sortByDiameterDESC,
-};
+import { DEFAULT_URL, MAX_ITEMS, START_PAGE } from '../../utils/constants';
+import sorting from '../../utils/sorting';
+import getPlanets, { IPlanet } from '../../api/getPlanets';
 
 const Main = () => {
-  const queryClient = useQueryClient();
-  const { activeFilter, query = '' } = usePlanetContext();
+  const { query = '', sort } = usePlanetContext();
+  const [page, setPage] = useState(START_PAGE);
+  const [planets, setPlanets] = useState<IPlanet[]>([]);
 
-  const [page, setPage] = useState(DEFAULT_URL);
+  const [url, setUrl] = useState(DEFAULT_URL);
 
-  const { data, refetch } = useQuery(['planets', { page, query }], () => getPlanets(page, query), {
-    keepPreviousData: true,
-  });
+  const { data, refetch } = useQuery(['planets', { url, query }], () => getPlanets(url, query));
 
   useEffect(() => {
+    if (!data) return;
+
+    setPlanets([...planets, ...data.results]);
+
     if (data?.next) {
-      queryClient.prefetchQuery(['planets', { page, query }], () => getPlanets(page));
+      setUrl(data.next);
     }
-  }, [data, page, query, queryClient]);
-
-  const planets = useMemo(() => {
-    if (!activeFilter || activeFilter === '') return data?.results;
-
-    return SORT_HASH[activeFilter](data?.results);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeFilter]);
+  }, [data]);
 
-  if (!data) return null;
+  useEffect(() => {
+    const r = sorting(planets, sort);
+    setPlanets(r);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sort]);
 
-  const handleNextPage = () => setPage(data.next ?? '');
-  const handlePrevPage = () => setPage(data.previous ?? '');
+  if (!data || data.next) return null;
 
-  const isDisabledPrev = !data.previous;
-  const isDisabledNext = !data.next;
+  const MAX_PAGE = data.count / MAX_ITEMS;
 
-  const currentPage = Number(new URLSearchParams(`?${page.split('?').pop()}`).get('page')) || 1;
-  const maxPage = data.count / MAX_ITEMS;
+  const handleNextPage = () => {
+    if (page >= MAX_PAGE) return;
+
+    setPage(page + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (page <= 1) return;
+
+    setPage(page - 1);
+  };
+
+  const isDisabledPrev = page === START_PAGE;
+  const isDisabledNext = page === MAX_PAGE;
+
+  const calculateStart = () => {
+    if (page === 1) return 0;
+
+    return (page - 1) * MAX_ITEMS;
+  };
+
+  console.log('HERE', planets);
+
+  // const planetsToShow = planets.slice(calculateStart(), page * MAX_ITEMS);
 
   return (
     <div className="container mx-auto px-4 sm:px-8">
@@ -69,17 +73,16 @@ const Main = () => {
           <h2 className="text-2xl font-semibold leading-tight">Planets</h2>
         </div>
         <SearchInput fetch={refetch} />
-        <Filters />
         <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
           <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-            <Table data={planets} />
+            <Table data={planets.slice(calculateStart(), page * MAX_ITEMS)} />
             <Pagination
-              currentPage={currentPage}
+              currentPage={page}
               handleNextPage={handleNextPage}
               handlePrevPage={handlePrevPage}
               isDisabledNext={isDisabledNext}
               isDisabledPrev={isDisabledPrev}
-              maxPage={maxPage}
+              maxPage={MAX_PAGE}
             />
           </div>
         </div>

@@ -1,17 +1,40 @@
-const parseData = (data: string) => (data === 'unknown' || data === 'N/A' ? 0 : Number(data));
+// import { IPlanet } from '../api/getPlanets';
 
-export const sortByNameASC = (data: any) => data.sort((a: any, b: any) => a.name > b.name);
+type SortType = 'ASC' | 'DESC';
 
-export const sortByNameDESC = (data: any) => data.sort((a: any, b: any) => a.name < b.name);
+type Sort = {
+  name: string;
+  type: SortType;
+};
 
-export const sortByPopulationASC = (data: any) =>
-  data.sort((a: any, b: any) => parseData(a.population) > parseData(b.population));
+const HASH_COLUMN_NAME = {
+  'Planet Name': {
+    name: 'name',
+    type: 'string',
+  },
+  Population: {
+    name: 'population',
+    type: 'number',
+  },
+  Diameter: { name: 'diameter', type: 'number' },
+};
 
-export const sortByPopulationDESC = (data: any) =>
-  data.sort((a: any, b: any) => parseData(a.population) < parseData(b.population));
+const sorting = (data: any, sort: Sort) => {
+  const column = HASH_COLUMN_NAME[sort.name];
 
-export const sortByDiameterASC = (data: any) =>
-  data.sort((a: any, b: any) => parseData(a.diameter) > parseData(b.diameter));
+  return data.sort((a: any, b: any) => {
+    const propA = column.type === 'string' ? String(a[column.name]) : Number(a[column.name]) || 0;
+    const propB = column.type === 'string' ? String(b[column.name]) : Number(b[column.name]) || 0;
 
-export const sortByDiameterDESC = (data: any) =>
-  data.sort((a: any, b: any) => parseData(a.diameter) < parseData(b.diameter));
+    if (sort.type === 'ASC') {
+      return propB < propA;
+    }
+
+    if (propA > propB) return -1;
+    if (propB > propA) return 1;
+
+    return 0;
+  });
+};
+
+export default sorting;

@@ -1,23 +1,30 @@
 import React, { createContext, useContext, useState } from 'react';
 
+type SortType = 'ASC' | 'DESC';
+
+type Sort = {
+  name: string;
+  type: SortType;
+};
+
 type PlanetContextProps = {
-  activeFilter: string;
   query: string;
-  setActiveFilter: (filter: string) => void;
   setQuery: (query: string) => void;
+  setSort: any;
+  sort: Sort;
 };
 
 const PlanetContext = createContext<PlanetContextProps>({} as PlanetContextProps);
 
 const PlanetProvider: React.FC = ({ children }) => {
+  const [sort, setSort] = useState<Sort>({} as Sort);
   const [query, setQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState('');
 
   const props: PlanetContextProps = {
-    activeFilter,
     query,
-    setActiveFilter,
     setQuery,
+    setSort,
+    sort,
   };
 
   return <PlanetContext.Provider value={props}>{children}</PlanetContext.Provider>;
