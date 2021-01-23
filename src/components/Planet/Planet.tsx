@@ -21,9 +21,9 @@ const Planet: FC<any> = ({ climate, diameter, gravity, name, population }) => (
       <p className="text-gray-900 whitespace-no-wrap">{gravity}</p>
     </td>
     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-      {climate.split(',').map((value: string) => (
+      {climate.split(',').map((value: string, index: number) => (
         <span
-          key="value"
+          key={`${value}-${index}`}
           className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
         >
           <span

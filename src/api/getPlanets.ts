@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { DEFAULT_URL } from '../utils/constants';
 
-interface IPlanet {
+export interface IPlanet {
   climate: string;
   diameter: string;
   gravity: string;
