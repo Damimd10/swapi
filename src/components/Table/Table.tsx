@@ -2,14 +2,10 @@ import React from 'react';
 
 import Column from './Column';
 
+import Loading from '../Loading';
 import Planet from '../Planet';
 import { COLUMNS } from '../../utils/constants';
-import { IPlanet } from '../../api/getPlanets';
 import { usePlanetContext } from '../../contexts/Planet';
-
-type TableProps = {
-  data: IPlanet[];
-};
 
 type SortType = 'ASC' | 'DESC';
 
@@ -18,8 +14,8 @@ const toggleType = (type: SortType) => {
   return 'ASC';
 };
 
-const Table: React.FC<TableProps> = ({ data }) => {
-  const { setSort, sort } = usePlanetContext();
+const Table: React.FC = () => {
+  const { isLoading, planets, setSort, sort } = usePlanetContext();
 
   const handleClickColumn = (name: string) => {
     const column = COLUMNS.find((currentColumn) => currentColumn.name === name);
@@ -48,9 +44,15 @@ const Table: React.FC<TableProps> = ({ data }) => {
         ))}
       </thead>
       <tbody>
-        {data.map((planet, index) => (
-          <Planet key={`${planet.name}-${index}`} {...planet} />
-        ))}
+        {isLoading ? (
+          <tr>
+            <td align="center" className="p-8" colSpan={5}>
+              <Loading />
+            </td>
+          </tr>
+        ) : (
+          planets.map((planet, index) => <Planet key={`${planet.name}-${index}`} {...planet} />)
+        )}
       </tbody>
     </table>
   );

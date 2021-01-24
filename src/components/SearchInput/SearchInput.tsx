@@ -2,19 +2,10 @@ import React from 'react';
 
 import { usePlanetContext } from '../../contexts/Planet';
 
-type SearchInputProps = {
-  fetch: () => void;
-};
-
-const SearchInput: React.FC<SearchInputProps> = ({ fetch }) => {
+const SearchInput = () => {
   const { setQuery } = usePlanetContext();
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      fetch();
-    }
-  };
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value);
 
   return (
     <div className="my-2 flex sm:flex-row flex-col">
@@ -28,7 +19,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ fetch }) => {
           placeholder="Search"
           className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           onChange={handleChangeInput}
-          onKeyDown={handleKeyDown}
         />
       </div>
     </div>

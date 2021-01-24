@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-import { DEFAULT_URL } from '../utils/constants';
-
+import { DEFAULT_URL } from './../utils/constants';
 export interface IPlanet {
   climate: string;
   diameter: string;
@@ -23,28 +22,14 @@ export interface IResponse {
   results: IPlanet[];
 }
 
-const getPlanets = (url: string, query?: string) => {
-  const isEmptyQuery = query === '';
-  const currentUrl = query && !isEmptyQuery ? DEFAULT_URL : url;
-  const source = axios.CancelToken.source();
+const getPlanets: any = async (url = DEFAULT_URL, currentData = []) => {
+  const data = await axios.get(url).then(({ data }) => data);
 
-  const params = {
-    cancelToken: source.token,
-    ...(!isEmptyQuery ? { params: { search: query } } : {}),
-  };
+  if (data.next) {
+    return getPlanets(data.next, [...currentData, ...data.results]);
+  }
 
-  const promise: Promise<IResponse> = new Promise((resolve) => setTimeout(resolve, 1000)).then(() =>
-    axios
-      .get<IResponse>(currentUrl, params)
-      .then(({ data }) => data)
-      .catch((error) => Promise.reject(error.response)),
-  );
-
-  (promise as any).cancel = () => {
-    source.cancel('Query was cancelled by React Query');
-  };
-
-  return promise;
+  return [...currentData, ...data.results];
 };
 
 export default getPlanets;
