@@ -60,17 +60,20 @@ const PlanetProvider: React.FC = ({ children }) => {
     const sortingResult = sorting(listToFilter as IPlanet[], sort);
 
     if (sortingResult) {
-      setPlanets([...sortingResult]);
+      hasQuery(query) ? setFilteredPlanets([...sortingResult]) : setPlanets([...sortingResult]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort]);
 
   useEffect(() => {
-    if (!hasQuery(query)) return setFilteredPlanets(null);
+    if (!hasQuery(query)) return setFilteredPlanets([]);
 
     const filteredList = filterByValue(planets, query);
 
-    setFilteredPlanets(filteredList);
+    const filteredAndSorted =
+      Object.keys(sort).length !== 0 ? sorting(filteredList, sort) || [] : filteredList;
+
+    setFilteredPlanets([...filteredAndSorted]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
