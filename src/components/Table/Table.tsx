@@ -9,12 +9,16 @@ import { usePlanetContext } from '../../contexts/Planet';
 
 type SortType = 'ASC' | 'DESC';
 
+type TableProps = {
+  page: number;
+};
+
 const toggleType = (type: SortType) => {
   if (type === 'ASC') return 'DESC';
   return 'ASC';
 };
 
-const Table: React.FC = () => {
+const Table: React.FC<TableProps> = ({ page }) => {
   const { isLoading, planets, setSort, sort } = usePlanetContext();
 
   const handleClickColumn = (name: string) => {
@@ -30,6 +34,9 @@ const Table: React.FC = () => {
   };
 
   const columnSorted = (name: string) => (sort.name === name ? sort.type : false);
+
+  const startPage = page === 1 ? 0 : (page - 1) * 10;
+  const endPage = page * 10;
 
   return (
     <table className="min-w-full leading-normal">
@@ -51,7 +58,9 @@ const Table: React.FC = () => {
             </td>
           </tr>
         ) : (
-          planets.map((planet, index) => <Planet key={`${planet.name}-${index}`} {...planet} />)
+          planets
+            .slice(startPage, endPage)
+            .map((planet, index) => <Planet key={`${planet.name}-${index}`} {...planet} />)
         )}
       </tbody>
     </table>
