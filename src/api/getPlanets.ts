@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-import { DEFAULT_URL } from './../utils/constants';
+import { constants } from '@utils';
+
+const { DEFAULT_URL } = constants;
+
 export interface IPlanet {
   climate: string;
   diameter: string;

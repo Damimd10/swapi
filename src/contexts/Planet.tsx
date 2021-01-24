@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import getPlanets, { IPlanet } from '../api/getPlanets';
-import { MAX_ITEMS } from '../utils/constants';
-import filterByValue from '../utils/filterByValue';
-import sorting from '../utils/sorting';
+import getPlanets, { IPlanet } from '@api/getPlanets';
+
+import { constants, filterByValue, sorting } from '@utils';
+
+const { MAX_ITEMS } = constants;
 
 type SortType = 'ASC' | 'DESC';
 

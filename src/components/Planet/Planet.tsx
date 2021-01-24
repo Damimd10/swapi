@@ -1,7 +1,7 @@
 import React from 'react';
 import numeral from 'numeral';
 
-import { IPlanet } from '../../api/getPlanets';
+import { IPlanet } from '@api/getPlanets';
 
 const Planet: React.FC<Partial<IPlanet>> = ({ climate, diameter, gravity, name, population }) => (
   <tr>

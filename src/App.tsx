@@ -1,5 +1,5 @@
-import Main from './components/Main';
-import { PlanetProvider } from './contexts/Planet';
+import Main from '@components/Main';
+import { PlanetProvider } from '@contexts/Planet';
 
 const App = () => (
   <PlanetProvider>

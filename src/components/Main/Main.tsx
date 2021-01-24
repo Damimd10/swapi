@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 
-import Pagination from '../Pagination';
-import SearchInput from '../SearchInput';
-import Table from '../Table';
+import Pagination from '@components/Pagination';
+import SearchInput from '@components/SearchInput';
+import Table from '@components/Table';
 
-import { usePlanetContext } from '../../contexts/Planet';
-import { START_PAGE } from '../../utils/constants';
+import { usePlanetContext } from '@contexts/Planet';
+
+import { constants } from '@utils';
+
+const { START_PAGE } = constants;
 
 const Main = () => {
   const { maxPage } = usePlanetContext();

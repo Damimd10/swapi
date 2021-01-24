@@ -1,4 +1,4 @@
-import { IPlanet } from '../api/getPlanets';
+import { IPlanet } from '@api/getPlanets';
 
 type SortType = 'ASC' | 'DESC';
 

@@ -1,4 +1,4 @@
-export const COLUMNS = [
+const COLUMNS = [
   {
     name: 'Planet Name',
     sort: true,
@@ -9,8 +9,15 @@ export const COLUMNS = [
   { name: 'Climate' },
 ];
 
-export const MAX_ITEMS = 10;
+const DEFAULT_URL = 'https://swapi.dev/api/planets';
 
-export const DEFAULT_URL = 'https://swapi.dev/api/planets';
+const MAX_ITEMS = 10;
 
-export const START_PAGE = 1;
+const START_PAGE = 1;
+
+export default {
+  COLUMNS,
+  DEFAULT_URL,
+  MAX_ITEMS,
+  START_PAGE,
+};

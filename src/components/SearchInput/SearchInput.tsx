@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { usePlanetContext } from '../../contexts/Planet';
+import { usePlanetContext } from '@contexts/Planet';
 
 const SearchInput = () => {
   const { setQuery } = usePlanetContext();

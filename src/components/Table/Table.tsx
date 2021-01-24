@@ -2,10 +2,14 @@ import React from 'react';
 
 import Column from './Column';
 
-import Loading from '../Loading';
-import Planet from '../Planet';
-import { COLUMNS } from '../../utils/constants';
-import { usePlanetContext } from '../../contexts/Planet';
+import Loading from '@components/Loading';
+import Planet from '@components/Planet';
+
+import { usePlanetContext } from '@contexts/Planet';
+
+import { constants } from '@utils';
+
+const { COLUMNS } = constants;
 
 type SortType = 'ASC' | 'DESC';
 
