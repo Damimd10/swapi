@@ -19,7 +19,7 @@ type PlanetContextProps = {
   planets: IPlanet[];
   query: string;
   setQuery: (query: string) => void;
-  setSort: any;
+  setSort: (sortingObject: Sort) => void;
   sort: Sort;
 };
 
@@ -56,7 +56,7 @@ const PlanetProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const listToFilter = hasQuery(query) ? filteredPlanets : planets;
-    const sortingResult = sorting(listToFilter, sort);
+    const sortingResult = sorting(listToFilter as IPlanet[], sort);
 
     if (sortingResult) {
       setPlanets([...sortingResult]);
@@ -80,7 +80,7 @@ const PlanetProvider: React.FC = ({ children }) => {
     error,
     isLoading,
     maxPage: Math.ceil(list.length / MAX_ITEMS),
-    planets: query && query !== '' ? filteredPlanets || [] : planets,
+    planets: hasQuery(query) ? filteredPlanets || [] : planets,
     query,
     setQuery,
     setSort,

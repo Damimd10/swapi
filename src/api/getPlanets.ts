@@ -22,7 +22,9 @@ export interface IResponse {
   results: IPlanet[];
 }
 
-const getPlanets: any = async (url = DEFAULT_URL, currentData = []) => {
+type PlanetAPI = (url?: string, currentData?: IPlanet[]) => Promise<IPlanet[]>;
+
+const getPlanets: PlanetAPI = async (url = DEFAULT_URL, currentData = []) => {
   const data = await axios.get(url).then(({ data }) => data);
 
   if (data.next) {

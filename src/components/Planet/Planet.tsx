@@ -1,8 +1,9 @@
-import { FC } from 'react';
-
+import React from 'react';
 import numeral from 'numeral';
 
-const Planet: FC<any> = ({ climate, diameter, gravity, name, population }) => (
+import { IPlanet } from '../../api/getPlanets';
+
+const Planet: React.FC<Partial<IPlanet>> = ({ climate, diameter, gravity, name, population }) => (
   <tr>
     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
       <div className="flex items-center">
@@ -21,7 +22,7 @@ const Planet: FC<any> = ({ climate, diameter, gravity, name, population }) => (
       <p className="text-gray-900 whitespace-no-wrap">{gravity}</p>
     </td>
     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-      {climate.split(',').map((value: string, index: number) => (
+      {climate?.split(',').map((value: string, index: number) => (
         <span
           key={`${value}-${index}`}
           className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
