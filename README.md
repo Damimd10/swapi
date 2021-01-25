@@ -1,46 +1,29 @@
-# Getting Started with Create React App
+# Swapi App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Application to show the planets that exist in the world of Star Wars
 
-## Available Scripts
+### Features
 
-In the project directory, you can run:
+- Search for text by all available properties in the table
+- Sort in ascending and descending order the name, population and diameter columns
 
-### `yarn start`
+### Run Locally
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Clone this repo and install dependencies (`yarn install`).
+- Start the app with `yarn start`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Technical decisions
 
-### `yarn test`
+The exercise literally stated that it must have some kind of mechanism to sort some columns. The problem that exists is that the API does not support any type of sorting or filter, which complicates the task.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+In an ideal world where the design of the application is in our charge, this should be solved from the back end side, adding the corresponding properties to perform a sorting or filter.
 
-### `yarn build`
+The case is that the API returns the results in a paginated way, which severely complicates the situation. Possible technical decisions here could be.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Call the backend and request the page each time you click on "Next page".
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The problem here is that if we want to sort by X columns or search for a piece of data, we would do it partially, applying the filter or sort to that page. In other words, when we move to another page, it will not be ordered, or even if we could order it at the beginning, the correlation of the data would be confusing, since there could be planets that start with "A" on page two, instead of page one. page one. This would cause great confusion to the user.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- The next solution is to make a recursive call to the API every time there is a next page, in this way, we will have all the data in memory to work locally, and implement the sort, filter and pagination locally through the front end.
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+This last solution was the one I chose, given an inspection by the API, which only had 60 planets and the page consisted of 10 items per page. The small amount of data and API calls makes this solution possible. Of course, the optimal solution would be to edit the back end to support the filter and sort. In case the API scales with more pages and more data, this solution does not scale very well.
