@@ -9,7 +9,7 @@ const COLUMNS = [
   { name: 'Climate' },
 ];
 
-const DEFAULT_URL = 'http://swapi.dev/api/planets';
+const DEFAULT_URL = 'https://swapi.dev/api/planets';
 
 const MAX_ITEMS = 10;
 
