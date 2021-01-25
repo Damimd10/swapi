@@ -25,7 +25,8 @@
     "prebuild": "npm run build:tailwind",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "lint": "eslint --fix"
   },
   "husky": {
     "hooks": {
