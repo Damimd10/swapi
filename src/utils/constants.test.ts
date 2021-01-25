@@ -29,7 +29,7 @@ describe('Constants', () => {
   });
 
   it('should display the DEFAULT_URL', () => {
-    expect(DEFAULT_URL).toMatchInlineSnapshot(`"https://swapi.dev/api/planets"`);
+    expect(DEFAULT_URL).toMatchInlineSnapshot(`"http://swapi.dev/api/planets"`);
   });
 
   it('should display the MAX_ITEMS', () => {
