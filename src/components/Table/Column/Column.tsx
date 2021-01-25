@@ -11,6 +11,7 @@ type ColumnProps = {
 const SortAscIcon = () => (
   <svg
     className="ml-2 w-6 h-6"
+    data-testid="asc-icon"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
@@ -28,6 +29,7 @@ const SortAscIcon = () => (
 const SortDescIcon = () => (
   <svg
     className="ml-2 w-6 h-6"
+    data-testid="desc-icon"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"

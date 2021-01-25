@@ -1,6 +1,6 @@
 import { IPlanet } from '@api/getPlanets';
 
-type SortType = 'ASC' | 'DESC';
+export type SortType = 'ASC' | 'DESC';
 
 type Sort = {
   name: string;
